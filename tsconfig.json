@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "target": "es2020",
+    "newLine": "LF",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "supplejs",
+    "outDir": "./dist",
+    "module": "ESNext",
+    "types": ["@types/node"]
+  },
+  "include": ["src/index.ts", "src/types.ts"]
+}

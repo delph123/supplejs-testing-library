@@ -1,0 +1,7 @@
+node_modules
+coverage
+src/__tests__
+pnpm-lock.yaml
+tsconfig.json
+tsup.config.ts
+vitest.config.ts

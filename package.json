@@ -1,0 +1,72 @@
+{
+  "name": "supplejs-testing-library",
+  "version": "1.0.0",
+  "description": "Simple and complete SuppleJS testing utilities that encourage good testing practices.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs"
+    },
+    "./pure": {
+      "import": "./dist/pure.js",
+      "types": "./dist/pure.d.ts",
+      "require": "./dist/pure.cjs"
+    }
+  },
+  "license": "MIT",
+  "author": "Delphin Barraud",
+  "homepage": "https://github.com/delph123/supplejs-testing-library",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/delph123/supplejs-testing-library.git"
+  },
+  "bugs": {
+    "url": "https://github.com/delph123/supplejs-testing-library/issues"
+  },
+  "keywords": [
+    "testing",
+    "supplejs",
+    "ui",
+    "dom",
+    "jsdom",
+    "unit",
+    "integration",
+    "functional",
+    "end-to-end",
+    "e2e"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit && tsc --noEmit --project src/__tests__/tsconfig.json",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "setup": "pnpm install && pnpm run validate",
+    "validate": "pnpm run typecheck && pnpm run test:coverage && pnpm run build"
+  },
+  "dependencies": {
+    "@testing-library/dom": "^10.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^20.14.9",
+    "@vitest/coverage-v8": "^1.6.0",
+    "jsdom": "^24.1.0",
+    "prettier": "^3.3.2",
+    "pretty-format": "^29.7.0",
+    "supplejs": "1.2.1",
+    "tsup": "8.1.0",
+    "typescript": "^5.5.3",
+    "vitest": "^1.6.0"
+  },
+  "peerDependencies": {
+    "supplejs": "1.2.1"
+  }
+}
