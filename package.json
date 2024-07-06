@@ -18,6 +18,7 @@
       "require": "./dist/pure.cjs"
     }
   },
+  "packageManager": "pnpm@9.4.0",
   "license": "MIT",
   "author": "Delphin Barraud",
   "homepage": "https://github.com/delph123/supplejs-testing-library",
