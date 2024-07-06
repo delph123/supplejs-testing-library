@@ -1,5 +1,6 @@
 node_modules
 coverage
+.github
 src/__tests__
 pnpm-lock.yaml
 tsconfig.json

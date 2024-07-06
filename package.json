@@ -1,6 +1,6 @@
 {
   "name": "supplejs-testing-library",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple and complete SuppleJS testing utilities that encourage good testing practices.",
   "type": "module",
   "main": "./dist/index.cjs",
