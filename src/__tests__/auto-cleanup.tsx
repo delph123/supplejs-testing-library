@@ -4,9 +4,9 @@ import { render } from "..";
 // environment which supports afterEach (like jest)
 // we'll get automatic cleanup between tests.
 test("first", () => {
-  render(() => <div>hi</div>);
+    render(() => <div>hi</div>);
 });
 
 test("second", () => {
-  expect(document.body.innerHTML).toEqual("");
+    expect(document.body.innerHTML).toEqual("");
 });
