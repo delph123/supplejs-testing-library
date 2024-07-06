@@ -1,6 +1,6 @@
 {
   "name": "supplejs-testing-library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple and complete SuppleJS testing utilities that encourage good testing practices.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -46,9 +46,9 @@
     "typecheck": "tsc --noEmit && tsc --noEmit --project src/__tests__/tsconfig.json",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage",
+    "coverage": "vitest --coverage",
     "setup": "pnpm install && pnpm run validate",
-    "validate": "pnpm run typecheck && pnpm run test:coverage && pnpm run build"
+    "validate": "pnpm run typecheck && pnpm run coverage && pnpm run build"
   },
   "dependencies": {
     "@testing-library/dom": "^10.3.1"

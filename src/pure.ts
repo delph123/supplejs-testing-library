@@ -1,23 +1,17 @@
 import { getQueriesForElement, prettyDOM } from "@testing-library/dom";
 import {
-  SuppleNodeEffect,
-  TrackingContext,
-  createRoot,
-  getOwner,
-  h,
-  catchError,
-  runWithOwner,
-  render as core_render,
-  createRenderEffect,
+    SuppleNodeEffect,
+    TrackingContext,
+    createRoot,
+    getOwner,
+    h,
+    catchError,
+    runWithOwner,
+    render as core_render,
+    createRenderEffect,
 } from "supplejs";
 
-import type {
-  Result,
-  Options,
-  Ref,
-  RenderHookResult,
-  RenderHookOptions,
-} from "./types";
+import type { Result, Options, Ref, RenderHookResult, RenderHookOptions } from "./types";
 
 const mountedContainers = new Set<Ref>();
 
@@ -45,52 +39,49 @@ const mountedContainers = new Set<Ref>();
  * - `result.unmount()` - unmounts the component, usually automatically called in cleanup
  * - `result.`[queries] - testing library queries, see https://testing-library.com/docs/queries/about)
  */
-export function render(
-  renderEffect: SuppleNodeEffect,
-  options: Options = {}
-): Result {
-  let { container, baseElement = container } = options;
-  let transientContainer: HTMLElement | undefined = undefined;
+export function render(renderEffect: SuppleNodeEffect, options: Options = {}): Result {
+    let { container, baseElement = container } = options;
+    let transientContainer: HTMLElement | undefined = undefined;
 
-  if (!baseElement) {
-    // Default to document.body instead of documentElement to avoid output of potentially-large
-    // head elements (such as JSS style blocks) in debug output.
-    baseElement = document.body;
-  }
+    if (!baseElement) {
+        // Default to document.body instead of documentElement to avoid output of potentially-large
+        // head elements (such as JSS style blocks) in debug output.
+        baseElement = document.body;
+    }
 
-  if (!container) {
-    transientContainer = document.createElement("div");
-    container = baseElement.appendChild(transientContainer);
-  }
+    if (!container) {
+        transientContainer = document.createElement("div");
+        container = baseElement.appendChild(transientContainer);
+    }
 
-  const wrappedUi: SuppleNodeEffect =
-    typeof options.wrapper === "function"
-      ? () =>
-          h(options.wrapper!, {
-            children: [renderEffect],
-          })
-      : renderEffect;
+    const wrappedUi: SuppleNodeEffect =
+        typeof options.wrapper === "function"
+            ? () =>
+                  h(options.wrapper!, {
+                      children: [renderEffect],
+                  })
+            : renderEffect;
 
-  const dispose = core_render(wrappedUi, container);
+    const dispose = core_render(wrappedUi, container);
 
-  // We'll add it to the mounted components regardless of whether it's actually
-  // added to document.body so the cleanup method works regardless of whether
-  // they're passing us a custom container or not.
-  mountedContainers.add({ container: transientContainer, dispose });
+    // We'll add it to the mounted components regardless of whether it's actually
+    // added to document.body so the cleanup method works regardless of whether
+    // they're passing us a custom container or not.
+    mountedContainers.add({ container: transientContainer, dispose });
 
-  const queryHelpers = getQueriesForElement(container, options.queries);
+    const queryHelpers = getQueriesForElement(container, options.queries);
 
-  return {
-    asFragment: () => container?.innerHTML,
-    container,
-    baseElement,
-    debug: (el = baseElement, maxLength?, options?) =>
-      Array.isArray(el)
-        ? el.forEach((e) => console.log(prettyDOM(e, maxLength, options)))
-        : console.log(prettyDOM(el, maxLength, options)),
-    unmount: dispose,
-    ...queryHelpers,
-  } as Result;
+    return {
+        asFragment: () => container?.innerHTML,
+        container,
+        baseElement,
+        debug: (el = baseElement, maxLength?, options?) =>
+            Array.isArray(el)
+                ? el.forEach((e) => console.log(prettyDOM(e, maxLength, options)))
+                : console.log(prettyDOM(el, maxLength, options)),
+        unmount: dispose,
+        ...queryHelpers,
+    } as Result;
 }
 
 /**
@@ -113,92 +104,86 @@ export function render(
  * - `result.cleanup()` - calls the cleanup function of the hook/primitive
  */
 export function renderHook<A extends any[], R>(
-  hook: (...args: A) => R,
-  options?: RenderHookOptions<A>
+    hook: (...args: A) => R,
+    options?: RenderHookOptions<A>,
 ): RenderHookResult<R> {
-  const initialProps: A | [] = Array.isArray(options)
-    ? options
-    : options?.initialProps ?? [];
-  const [dispose, owner, result] = createRoot((dispose) => {
-    if (
-      typeof options === "object" &&
-      "wrapper" in options &&
-      typeof options.wrapper === "function"
-    ) {
-      let result: ReturnType<typeof hook>;
-      createRenderEffect(
-        options.wrapper({
-          children: [
-            () => {
-              result = hook(...(initialProps as A));
-              return null;
-            },
-          ],
-        })
-      );
-      return [dispose, getOwner(), result!];
-    }
-    return [dispose, getOwner(), hook(...(initialProps as A))];
-  });
+    const initialProps: A | [] = Array.isArray(options) ? options : options?.initialProps ?? [];
+    const [dispose, owner, result] = createRoot((dispose) => {
+        if (typeof options === "object" && "wrapper" in options && typeof options.wrapper === "function") {
+            let result: ReturnType<typeof hook>;
+            createRenderEffect(
+                options.wrapper({
+                    children: [
+                        () => {
+                            result = hook(...(initialProps as A));
+                            return null;
+                        },
+                    ],
+                }),
+            );
+            return [dispose, getOwner(), result!];
+        }
+        return [dispose, getOwner(), hook(...(initialProps as A))];
+    });
 
-  mountedContainers.add({ dispose });
+    mountedContainers.add({ dispose });
 
-  return { result, cleanup: dispose, owner };
+    return { result, cleanup: dispose, owner };
 }
 
 export function testEffect<T = void>(
-  fn: (done: (result: T) => void) => void,
-  owner?: TrackingContext
+    fn: (done: (result: T) => void) => void,
+    owner?: TrackingContext,
 ): Promise<T> {
-  const context: {
-    promise?: Promise<T>;
-    done?: (result: T) => void;
-    fail?: (error: any) => void;
-  } = {};
-  context.promise = new Promise<T>((resolve, reject) => {
-    context.done = resolve;
-    context.fail = reject;
-  });
-  createRoot((dispose) => {
-    catchError(
-      () => {
-        const f = owner
-          ? (done: (result: T) => void) => {
-              const h = () => {
-                fn(done);
-              };
-              runWithOwner(owner, h);
-            }
-          : fn;
+    const context: {
+        promise?: Promise<T>;
+        done?: (result: T) => void;
+        fail?: (error: any) => void;
+    } = {};
+    context.promise = new Promise<T>((resolve, reject) => {
+        context.done = resolve;
+        context.fail = reject;
+    });
+    createRoot((dispose) => {
+        catchError(
+            () => {
+                const f = owner
+                    ? (done: (result: T) => void) => {
+                          const h = () => {
+                              fn(done);
+                          };
+                          runWithOwner(owner, h);
+                      }
+                    : fn;
 
-        f((result) => {
-          context.done?.(result);
-          dispose();
-        });
-      },
-      (err) => context.fail?.(err)
-    );
-  });
-  return context.promise;
+                f((result) => {
+                    context.done?.(result);
+                    dispose();
+                });
+            },
+            (err) => context.fail?.(err),
+        );
+    });
+    return context.promise;
 }
 
 function cleanupAtContainer(ref: Ref) {
-  const { container, dispose } = ref;
-  try {
-    dispose();
-  } catch (e) {
-    // consume & ignore error
-  }
+    const { container, dispose } = ref;
+    try {
+        dispose();
+    } catch (e) {
+        // consume & ignore error
+    }
 
-  if (container?.parentNode != null) {
-    container.parentNode.removeChild(container);
-  }
+    if (container?.parentNode != null) {
+        container.parentNode.removeChild(container);
+    }
 
-  mountedContainers.delete(ref);
+    mountedContainers.delete(ref);
 }
 
 export function cleanup() {
-  mountedContainers.forEach(cleanupAtContainer);
+    mountedContainers.forEach(cleanupAtContainer);
 }
 
 export * from "@testing-library/dom";
