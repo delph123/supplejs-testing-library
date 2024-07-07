@@ -5,6 +5,7 @@ import { cleanup } from "./pure";
 // this ensures that tests run in isolation from each other.
 // If you don't like this then either import the `pure` module
 // or set the STL_SKIP_AUTO_CLEANUP env variable to 'true'.
+// @ts-ignore
 if (typeof process === "undefined" || !process.env.STL_SKIP_AUTO_CLEANUP) {
     // @ts-ignore
     if (typeof afterEach === "function") {

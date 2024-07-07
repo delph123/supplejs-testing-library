@@ -1,6 +1,6 @@
 {
   "name": "supplejs-testing-library",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple and complete SuppleJS testing utilities that encourage good testing practices.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -57,17 +57,16 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/user-event": "^14.5.2",
-    "@types/node": "^20.14.9",
     "@vitest/coverage-v8": "^1.6.0",
     "jsdom": "^24.1.0",
     "prettier": "^3.3.2",
     "pretty-format": "^29.7.0",
-    "supplejs": "1.2.1",
-    "tsup": "8.1.0",
+    "supplejs": "^1.2.2",
+    "tsup": "^8.1.0",
     "typescript": "^5.5.3",
     "vitest": "^1.6.0"
   },
   "peerDependencies": {
-    "supplejs": "1.2.1"
+    "supplejs": "^1.2.2"
   }
 }

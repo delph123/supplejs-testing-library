@@ -11,8 +11,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "supplejs",
     "outDir": "./dist",
-    "module": "ESNext",
-    "types": ["@types/node"]
+    "module": "ESNext"
   },
   "include": ["src/index.ts", "src/types.ts"]
 }
