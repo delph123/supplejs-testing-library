@@ -61,19 +61,6 @@ test("userEvent triggers createEffect calls", async () => {
     expect(cb).toHaveBeenCalledTimes(1);
 });
 
-// test("calls to hydrate will run createEffects", () => {
-//   const cb = vi.fn();
-
-//   function Comp() {
-//     createEffect(cb);
-//     return null;
-//   }
-
-//   render(() => <Comp />, { hydrate: true });
-
-//   expect(cb).toHaveBeenCalledTimes(1);
-// });
-
 test("queries should not return elements outside of the container", () => {
     const { container, getAllByText } = render(() => <div>Some text...</div>);
     const falseContainer = document.createElement("p");
@@ -87,6 +74,13 @@ test("wrapper option works correctly", () => {
         wrapper: (props) => () => <div>Wrapper {props.children}</div>,
     });
     expect(asFragment()).toBe("<div>Wrapper <div>Component</div></div>");
+});
+
+test("wrapper option works with wrapper returning JSX directly", () => {
+    const { asFragment } = render(() => <span>Component</span>, {
+        wrapper: (props) => <div>Wrapper {props.children}</div>,
+    });
+    expect(asFragment()).toBe("<div>Wrapper <span>Component</span></div>");
 });
 
 test("wrapper option includes context", async () => {
@@ -141,6 +135,15 @@ test("wrapper context is available in renderHook", () => {
     expect(result).toBe("context value");
 });
 
+test("wrapper context is available in renderHook with wrapper returning JSX directly", () => {
+    const context = createContext("initial value");
+    const testHook = () => useContext(context);
+    const Wrapper = (props: { children: SuppleNode }) => (
+        <context.Provider value="context value">{props.children}</context.Provider>
+    );
+    const { result } = renderHook(testHook, { wrapper: Wrapper });
+    expect(result).toBe("context value");
+});
 // declare module "solid-js" {
 //   namespace JSX {
 //     interface Directives {

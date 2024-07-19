@@ -107,18 +107,14 @@ export function renderHook<A extends any[], R>(
     hook: (...args: A) => R,
     options?: RenderHookOptions<A>,
 ): RenderHookResult<R> {
-    const initialProps: A | [] = Array.isArray(options) ? options : options?.initialProps ?? [];
+    const initialProps: A | [] = Array.isArray(options) ? options : (options?.initialProps ?? []);
     const [dispose, owner, result] = createRoot((dispose) => {
         if (typeof options === "object" && "wrapper" in options && typeof options.wrapper === "function") {
             let result: ReturnType<typeof hook>;
-            createRenderEffect(
-                options.wrapper({
-                    children: [
-                        () => {
-                            result = hook(...(initialProps as A));
-                            return null;
-                        },
-                    ],
+            createRenderEffect(() =>
+                h(options.wrapper!, undefined, () => {
+                    result = hook(...(initialProps as A));
+                    return null;
                 }),
             );
             return [dispose, getOwner(), result!];

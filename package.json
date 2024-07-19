@@ -1,6 +1,6 @@
 {
   "name": "supplejs-testing-library",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Simple and complete SuppleJS testing utilities that encourage good testing practices.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -42,7 +42,7 @@
     "e2e"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "build": "tsup",
     "typecheck": "tsc --noEmit && tsc --noEmit --project src/__tests__/tsconfig.json",
     "test": "vitest",
@@ -52,21 +52,21 @@
     "validate": "pnpm run typecheck && pnpm run coverage && pnpm run build"
   },
   "dependencies": {
-    "@testing-library/dom": "^10.3.1"
+    "@testing-library/dom": "^10.3.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/user-event": "^14.5.2",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/coverage-v8": "^2.0.3",
     "jsdom": "^24.1.0",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "pretty-format": "^29.7.0",
-    "supplejs": "^1.2.2",
-    "tsup": "^8.1.0",
+    "supplejs": "^1.3.0",
+    "tsup": "^8.2.0",
     "typescript": "^5.5.3",
-    "vitest": "^1.6.0"
+    "vitest": "^2.0.3"
   },
   "peerDependencies": {
-    "supplejs": "^1.2.2"
+    "supplejs": "^1.3.0"
   }
 }

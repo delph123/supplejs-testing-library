@@ -25,10 +25,10 @@ function StopWatch() {
 
     onCleanup(() => clearInterval(timer));
 
-    return () => (
+    return (
         <div>
-            <span>{lapse()}ms</span>
-            <button onClick={handleRunClick}>{running() ? "Stop" : "Start"}</button>
+            <span>{lapse}ms</span>
+            <button onClick={handleRunClick}>{() => (running() ? "Stop" : "Start")}</button>
             <button onClick={handleClearClick}>Clear</button>
         </div>
     );
